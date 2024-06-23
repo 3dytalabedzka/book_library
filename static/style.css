@@ -1,0 +1,32 @@
+body {
+    font-family: 'Arial Narrow', sans-serif;
+    margin: 1;
+    padding: 1;
+    background-color: #D0D3D4;
+}
+
+body, h2, h3 {
+    color: #CCCCCC;
+}
+
+h1 {
+    color: #CC9966;
+}
+
+form {
+    margin-bottom: 1em;
+}
+
+input, button {
+    margin-top: 0.5em;
+}
+
+select {
+    width: 25%;
+    height: 30px;
+    overflow-y: scroll;
+}
+
+.form-container {
+    display: none;
+}

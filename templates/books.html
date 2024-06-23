@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Book Library</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        function showEditOptions() {
+            var selectedBookId = document.getElementById("bookSelect").value;
+            if (selectedBookId) {
+                document.getElementById("editButtons").style.display = "block";
+            } else {
+                document.getElementById("editButtons").style.display = "none";
+                hideAllForms();
+            }
+        }
+
+        function showEditForm() {
+            var selectedBookId = document.getElementById("bookSelect").value;
+            if (selectedBookId) {
+                hideAllForms();
+                document.getElementById("edit-form-" + selectedBookId).style.display = "block";
+            }
+        }
+
+        function showDeleteForm() {
+            var selectedBookId = document.getElementById("bookSelect").value;
+            if (selectedBookId) {
+                hideAllForms();
+                document.getElementById("delete-form-" + selectedBookId).style.display = "block";
+            }
+        }
+
+        function showAddBookForm() {
+            hideAllForms();
+            document.getElementById("addBookForm").style.display = "block";
+        }
+
+        function hideAllForms() {
+            var forms = document.getElementsByClassName("form-container");
+            for (var i = 0; i < forms.length; i++) {
+                forms[i].style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>
+        <img src="\static\book.png" style="float:left;width:40px;height:40px;padding: 0px 15px 0px 5px;">
+         Book library
+    </h1>
+
+    <h2>Select a book to edit or delete</h2>
+    <select id="bookSelect" onchange="showEditOptions()">
+        <option value="">Select a book</option>
+        {% for book in books %}
+        <option value="{{ book.id }}">{{ book.author}} ({{ book.year }}) <em>{{ book.title }}</em> </option>
+        {% endfor %}
+    </select>
+
+    <div id="editButtons" style="display: none;">
+        <button onclick="showEditForm()">Edit book</button>
+        <button onclick="showDeleteForm()">Delete book</button>
+    </div>
+
+    {% for book in books %}
+    <div id="edit-form-{{ book.id }}" class="edit-form form-container">
+        <h3>Edit book</h3>
+        <form action="/books/update/{{ book.id }}" method="post">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="text" name="title" value="{{ book.title }}" required>
+            <input type="text" name="author" value="{{ book.author }}" required>
+            <input type="number" name="year" value="{{ book.year }}" required>
+            <input type="text" name="genre" value="{{ book.genre }}" required>
+            <button type="submit">Update book</button>
+        </form>
+    </div>
+
+    <div id="delete-form-{{ book.id }}" class="delete-form form-container">
+        <form action="/books/delete/{{ book.id }}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <p>Are you sure you want to delete {{ book.author}} ({{ book.year }}) <em>{{ book.title }}</em>?</p>
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+    {% endfor %}
+
+    <button onclick="showAddBookForm()">Add new book</button>
+
+    <div id="addBookForm" class="add-book-form form-container">
+        <form action="/books/" method="post">
+            <h2>Add book</h2>
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="author" placeholder="Author" required>
+            <input type="number" name="year" placeholder="Year" required>
+            <input type="text" name="genre" placeholder="Genre" required>
+            <button type="submit">Add book</button>
+        </form>
+    </div>
+
+</body>
+</html>
